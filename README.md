@@ -17,6 +17,8 @@
   <img src="https://img.shields.io/badge/tests-190%2B_suites_%7C_1200%2B_tests-purple.svg" alt="Tests">
 </p>
 
+本项目由 [LINUX DO](https://linux.do) 社区认可。
+
 ---
 
 <a name="english"></a>
