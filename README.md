@@ -26,14 +26,14 @@
 
 ### 1. Overview
 
-**Nexus** is an enterprise-grade Local AI Control Plane designed specifically for ChatGPT, DeepSeek, and modern AI coding assistants. It securely bridges remote LLMs to your local workstation through a high-performance **Secure MCP Tunnel** (Streamable HTTP / SSE with OAuth 2.0 & Bearer tokens).
+**Nexus** is an enterprise-grade Local AI Control Plane designed specifically for ChatGPT, DeepSeek, and modern AI coding assistants. It securely bridges remote LLMs to your local workstation through a high-performance **Secure MCP Tunnel** (Streamable HTTP with Bearer token authentication).
 
 Nexus allows AI agents to inspect, edit, build, debug, and orchestrate complex local engineering workflows within strictly enforced sandbox boundaries—without exposing your full filesystem or transmitting proprietary code to untrusted cloud intermediaries.
 
 ```text
  ChatGPT / DeepSeek / Web AI Assistants
                │
-               │ Secure MCP Tunnel (Streamable HTTP / SSE, Bearer lb_xxx, OAuth 2.0)
+               │ Secure MCP Tunnel (Streamable HTTP, Bearer lb_xxx)
                ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                   Nexus Desktop Control Center (Tauri 2)               │
@@ -100,7 +100,7 @@ Nexus/
 │   ├── desktop/          # Tauri 2 + React + Vite Desktop Control Center
 │   ├── runner/           # Local execution daemon (332 tools, Action Ledger, Computer Use)
 │   ├── server/           # Fastify MCP Server with SQLite WAL persistence & REST API
-│   └── bridge/           # Standalone Nexus MCP Bridge (OAuth 2.0 / ChatGPT / DeepSeek)
+│   └── bridge/           # Standalone Nexus MCP Bridge (Streamable HTTP / ChatGPT / DeepSeek)
 ├── packages/
 │   ├── protocol/         # Pure protocol types, 332 Canonical tool definitions, RPC schemas
 │   ├── security/         # Sandboxing, path verification, and command risk engine
@@ -180,7 +180,7 @@ Header: `Authorization: Bearer lb_your_token_here`
 ```
 
 **Cursor / Windsurf / Any MCP Client**:
-- Transport: `Streamable HTTP` or `SSE`
+- Transport: `Streamable HTTP`
 - URL: `http://127.0.0.1:18080/mcp`
 - Headers: `{"Authorization": "Bearer lb_your_token_here"}`
 
@@ -222,14 +222,14 @@ cargo check --manifest-path apps/desktop/src-tauri/Cargo.toml
 
 ### 1. 项目概述
 
-**Nexus** 是一套专为 ChatGPT、DeepSeek 及新一代 AI 编程智能体量身打造的企业级**本地 AI 控制中枢（Local AI Control Plane）**。它通过高性能**安全 MCP 隧道**（基于 OAuth 2.0 与 Bearer 令牌的 Streamable HTTP / SSE 协议），将远端大模型安全连接至开发者的本地工作站。
+**Nexus** 是一套专为 ChatGPT、DeepSeek 及新一代 AI 编程智能体量身打造的企业级**本地 AI 控制中枢（Local AI Control Plane）**。它通过高性能**安全 MCP 隧道**（基于 Streamable HTTP 传输及 Bearer 令牌认证），将远端大模型安全连接至开发者的本地工作站。
 
 Nexus 赋予 AI 智能体在严格沙箱边界内检索、编辑、构建、测试与编排完整研发工作流的能力，从根本上杜绝整盘泄露风险，且绝不将私有源码转传给任何不可信第三方云端中继。
 
 ```text
  ChatGPT / DeepSeek / Web AI Assistants 客户端
                │
-               │ 安全 MCP 隧道 (Streamable HTTP / SSE, Bearer lb_xxx, OAuth 2.0)
+               │ 安全 MCP 隧道 (Streamable HTTP, Bearer lb_xxx)
                ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │                   Nexus 桌面控制中心 (Tauri 2 + React)                 │
@@ -296,7 +296,7 @@ Nexus/
 │   ├── desktop/          # Tauri 2 + React + Vite 桌面控制中心
 │   ├── runner/           # 本地执行守护进程（332 工具集、Action Ledger、Computer Use）
 │   ├── server/           # Fastify MCP 服务端（SQLite WAL 持久化 & REST API）
-│   └── bridge/           # Nexus MCP 独立网桥（兼容 OAuth 2.0 / ChatGPT / DeepSeek）
+│   └── bridge/           # Nexus MCP 独立网桥（Streamable HTTP / ChatGPT / DeepSeek）
 ├── packages/
 │   ├── protocol/         # 纯协议类型层、332 工具规范定义、RPC JSON-Schema
 │   ├── security/         # 沙箱隔离防护、路径规范化验证、命令风控引擎
@@ -377,7 +377,7 @@ Header 添加：`Authorization: Bearer lb_your_token_here`
 ```
 
 **Cursor / Windsurf / 通用 MCP 客户端**：
-- 传输类型：`Streamable HTTP` 或 `SSE`
+- 传输类型：`Streamable HTTP`
 - 请求地址：`http://127.0.0.1:18080/mcp`
 - 标头参数：`{"Authorization": "Bearer lb_your_token_here"}`
 
