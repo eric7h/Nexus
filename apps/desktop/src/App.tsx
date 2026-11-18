@@ -541,7 +541,7 @@ export const App: React.FC = () => {
               <OctagonAlert className="w-6 h-6 shrink-0" />
               <div>
                 <div className="font-semibold text-sm">
-                  Nexus Core Server failed to start / 核心服务启动失败
+                  Nexus Core Server failed to start
                 </div>
                 <div className="text-xs text-red-400 font-mono mt-1">
                   Reason: {startupError}
