@@ -237,7 +237,7 @@ export const enUS: I18nDictionary = {
     operatorSettingsTitle: "Local Operator Settings",
     operatorSettingsDesc: "Configure the operator display name shown in approval logs, activity records, and audit events.",
     operatorDisplayNameLabel: "Operator Display Name",
-    operatorDisplayNameHelp: "E.g., Local User, Admin, Security Lead. Default: 本机用户.",
+    operatorDisplayNameHelp: "E.g., Local User, Admin, Security Lead. Default: Local User.",
     resetAllDefaultsBtn: "Reset All Projects to Defaults",
     resetAllDefaultsConfirm: "Are you sure you want to reset all projects' trust policies to the default Standard mode?",
     clearAllSessionsBtn: "Clear All Active Session Trusts",
