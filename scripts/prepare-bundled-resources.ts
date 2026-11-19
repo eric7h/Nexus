@@ -311,7 +311,9 @@ async function main() {
 
   // 4b. Prepare Tunnel Runtime
   const externalTunnelSource = path.resolve(rootDir, "../tunnel-client-runtime-cloudflared-v0.0.14-windows-amd64");
-  if (!fs.existsSync(path.join(tunnelDir, "tunnel-client-runtime-cloudflared.exe")) && fs.existsSync(externalTunnelSource)) {
+  if (process.platform === "darwin") {
+    child_process.execFileSync("bash", [path.join(rootDir, "scripts/prepare-macos-tunnel-runtime.sh"), tunnelDir], { stdio: "inherit" });
+  } else if (!fs.existsSync(path.join(tunnelDir, "tunnel-client-runtime-cloudflared.exe")) && fs.existsSync(externalTunnelSource)) {
     console.log(`Copying tunnel runtime from ${externalTunnelSource} to ${tunnelDir}...`);
     fs.cpSync(externalTunnelSource, tunnelDir, { recursive: true });
   }

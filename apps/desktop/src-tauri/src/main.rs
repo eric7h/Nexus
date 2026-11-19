@@ -18,6 +18,14 @@ use std::os::windows::process::CommandExt;
 #[cfg(target_os = "windows")]
 const CREATE_NO_WINDOW: u32 = 0x08000000;
 
+// Universal macOS bundles contain a separate, unmodified upstream distribution for each CPU.
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
+const TUNNEL_RUNTIME: &str = "tunnel/darwin-arm64/tunnel-client-runtime-cloudflared";
+#[cfg(all(target_os = "macos", target_arch = "x86_64"))]
+const TUNNEL_RUNTIME: &str = "tunnel/darwin-amd64/tunnel-client-runtime-cloudflared";
+#[cfg(not(target_os = "macos"))]
+const TUNNEL_RUNTIME: &str = "tunnel/tunnel-client-runtime-cloudflared.exe";
+
 pub mod tunnel;
 pub mod shutdown;
 pub mod bridge;
@@ -463,12 +471,9 @@ fn resolve_production_resources(app: &tauri::AppHandle) -> Result<ResourceDiagno
         String::new()
     };
 
-    let tunnel_cf = resource_root.join("tunnel").join("tunnel-client-runtime-cloudflared.exe");
-    let tunnel_fallback = resource_root.join("tunnel").join("cloudflared.exe");
-    let tunnel_str = if tunnel_cf.exists() {
-        tunnel_cf.to_string_lossy().to_string()
-    } else if tunnel_fallback.exists() {
-        tunnel_fallback.to_string_lossy().to_string()
+    let tunnel_path = resource_root.join(TUNNEL_RUNTIME);
+    let tunnel_str = if tunnel_path.is_file() {
+        tunnel_path.to_string_lossy().into_owned()
     } else {
         String::new()
     };
@@ -2013,7 +2018,7 @@ fn spawn_tunnel_internal(
     app: &tauri::AppHandle,
     state: Arc<Mutex<SupervisorState>>,
 ) -> Result<(), String> {
-    let tunnel_exe = match resolve_resource_file(app, "tunnel/tunnel-client-runtime-cloudflared.exe") {
+    let tunnel_exe = match resolve_resource_file(app, TUNNEL_RUNTIME) {
         Some(p) => p,
         None => {
             if let Ok(mut s) = state.lock() {
@@ -2138,7 +2143,7 @@ fn spawn_tunnel_internal(
 
     if let Some(parent) = tunnel_exe.parent() {
         cmd.current_dir(parent);
-        let cf_path = parent.join("cloudflared.exe");
+        let cf_path = parent.join(if cfg!(target_os = "macos") { "cloudflared" } else { "cloudflared.exe" });
         if cf_path.exists() {
             cmd.env("CLOUDFLARED_PATH", cf_path);
         }
